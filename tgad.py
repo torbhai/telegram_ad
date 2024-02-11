@@ -97,18 +97,18 @@ def unknown(update, context):
 
 # Create an updater object with the bot token
 bot = Bot(token=BOT_TOKEN)
-updater = Updater(bot=bot)
+updater = Updater(bot=bot, use_context=True)
 
 # Get the dispatcher object from the updater
 dispatcher = updater.dispatcher
 
 # Add handlers for the commands and the channel posts
-dispatcher.add_handler(CommandHandler('start', start))
+dispatcher.add_handler(CommandHandler('start', start, run_async=True))
 dispatcher.add_handler(CommandHandler('subscribe', subscribe))
 dispatcher.add_handler(CommandHandler('unsubscribe', unsubscribe))
 dispatcher.add_handler(CommandHandler('ad', ad))
-dispatcher.add_handler(MessageHandler(Filters.update.channel_post, channel_post))
-dispatcher.add_handler(MessageHandler(Filters.command, unknown))
+dispatcher.add_handler(MessageHandler(filters.update.channel_post, channel_post))
+dispatcher.add_handler(MessageHandler(filters.command, unknown))
 
 # Start the bot
 updater.start_polling()
