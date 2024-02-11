@@ -3,6 +3,8 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.ext import ConversationHandler
 import logging
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram.ext import CallbackQueryHandler
 
 # Enable logging for debugging purposes
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -22,12 +24,17 @@ updater = Updater(token=BOT_TOKEN, use_context=True)
 # Get the dispatcher object from the updater
 dispatcher = updater.dispatcher
 
-# Define a function to handle the /start command
 def start(update, context):
-    # Send a welcome message to the user
-    update.message.reply_text("Introducing our The Logman Telegram Bot By @TheLogman, a one-stop solution for all your CC/DC and Logs needs. This bot is designed to streamline and automate the process of selling CC/DC and Logs, making it easier and more efficient than ever before.")
-    # Log the user ID and the command
-    logger.info(f"User {update.message.from_user.id} started the bot")
+    keyboard = [[InlineKeyboardButton("Subscribe", callback_data='subscribe')]]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    update.message.reply_text("Introducing our The Logman Telegram Bot By @TheLogman, a one-stop solution for all your CC/DC and Logs needs. This bot is designed to streamline and automate the process of selling CC/DC and Logs, making it easier and more efficient than ever before. Click the button below to subscribe.", reply_markup=reply_markup)
+
+def button(update, context):
+    query = update.callback_query
+    if query.data == 'subscribe':
+        subscribe(query, context)
+
+dispatcher.add_handler(CallbackQueryHandler(button))
 
 # Define a function to handle the /subscribe command
 def subscribe(update, context):
@@ -56,6 +63,16 @@ def unsubscribe(update, context):
     else:
         # Send a message saying that the user is not subscribed
         update.message.reply_text("You are not subscribed to the bot.")
+
+AUTHORIZED_USER_ID = 6950394833  # Replace this with the ID of the authorized user
+
+def check_subscribers(update, context):
+    if update.message.from_user.id == AUTHORIZED_USER_ID:
+        update.message.reply_text(f"The bot currently has {len(subscribers)} subscribers.")
+    else:
+        update.message.reply_text("You are not authorized to use this command.")
+
+dispatcher.add_handler(CommandHandler('check_subscribers', check_subscribers))
 
 # Define a function to handle the /ad command
 def ad(update, context):
