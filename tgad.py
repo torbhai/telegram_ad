@@ -82,6 +82,14 @@ def ad_content(update, context):
     return ConversationHandler.END
 
 # Create a conversation handler for the /ad command and the advertisement content
+def cancel(update, context):
+    # Send a message to the user
+    update.message.reply_text("You have cancelled the conversation.")
+    # Log the user ID and the command
+    logger.info(f"User {update.message.from_user.id} cancelled the conversation")
+    # Return the ConversationHandler.END constant
+    return ConversationHandler.END
+
 ad_handler = ConversationHandler(
     entry_points=[CommandHandler('ad', ad)],
     states={
