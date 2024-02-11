@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 
 # Define the bot token and the channel ID to forward posts from
 BOT_TOKEN = "6855406193:AAELg2mqIo_BVHcvsk0mAk_YBVCc1PvuffY"
-CHANNEL_ID = "@societyoftb"
+CHANNEL_ID = "societyoftb"
 
 # Define a list of users who have subscribed to the bot
 subscribers = []
@@ -53,26 +53,44 @@ def unsubscribe(update, context):
 # Define a function to handle the /ad command
 def ad(update, context):
     # Check if the user is authorized to send advertisements
-    # You can change this condition to suit your needs
     if update.message.from_user.id == 6950394833: # Replace this with the ID of the authorized user
-        # Get the text of the advertisement
-        ad_text = update.message.text.replace("/ad ", "")
-        # Loop through the subscribers list
-        for user_id in subscribers:
-            try:
-                # Send the advertisement to each subscriber
-                context.bot.send_message(chat_id=user_id, text=ad_text)
-                # Log the user ID and the advertisement
-                logger.info(f"Sent advertisement to user {user_id}: {ad_text}")
-            except Exception as e:
-                # Handle any errors that may occur
-                logger.error(f"Failed to send advertisement to user {user_id}: {e}")
-        # Send a confirmation message to the sender
-        update.message.reply_text("Your advertisement has been sent to all subscribers.")
+        # Ask for the advertisement content
+        update.message.reply_text("Please send the content of the advertisement.")
+        return 'WAITING_FOR_AD_CONTENT'
     else:
         # Send a message saying that the user is not authorized to send advertisements
         update.message.reply_text("You are not authorized to send advertisements.")
+        return ConversationHandler.END
 
+# Define a function to handle the advertisement content
+def ad_content(update, context):
+    # Get the text of the advertisement
+    ad_text = update.message.text
+    # Loop through the subscribers list
+    for user_id in subscribers:
+        try:
+            # Send the advertisement to each subscriber
+            context.bot.send_message(chat_id=user_id, text=ad_text)
+            # Log the user ID and the advertisement
+            logger.info(f"Sent advertisement to user {user_id}: {ad_text}")
+        except Exception as e:
+            # Handle any errors that may occur
+            logger.error(f"Failed to send advertisement to user {user_id}: {e}")
+    # Send a confirmation message to the sender
+    update.message.reply_text("Your advertisement has been sent to all subscribers.")
+    return ConversationHandler.END
+
+# Create a conversation handler for the /ad command and the advertisement content
+ad_handler = ConversationHandler(
+    entry_points=[CommandHandler('ad', ad)],
+    states={
+        'WAITING_FOR_AD_CONTENT': [MessageHandler(Filters.text & ~Filters.command, ad_content)]
+    },
+    fallbacks=[CommandHandler('cancel', cancel)]
+)
+
+# Add the conversation handler to the dispatcher
+dispatcher.add_handler(ad_handler)
 # Define a function to handle the channel posts
 def channel_post(update, context):
     # Check if the post is from the specified channel
