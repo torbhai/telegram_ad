@@ -32,9 +32,13 @@ def start(update, context):
     reply_markup = InlineKeyboardMarkup(keyboard)
     update.message.reply_text("Introducing our The Logman Telegram Bot By @TheLogman, a one-stop solution for all your CC/DC and Logs needs. This bot is designed to streamline and automate the process of selling CC/DC and Logs, making it easier and more efficient than ever before. Click the button below to subscribe.", reply_markup=reply_markup)
 
-# Define a function to handle the /subscribe command and button
+# Define a function to handle the /subscribe command
 def subscribe(update, context):
     user_id = update.effective_user.id
+    subscribe_user(user_id, context)
+
+# Function to subscribe a user given a user ID
+def subscribe_user(user_id, context):
     if user_id not in subscribers:
         subscribers.append(user_id)
         context.bot.send_message(
@@ -69,8 +73,10 @@ def check_subscribers(update, context):
 def button(update, context):
     query = update.callback_query
     query.answer()
+    user_id = query.from_user.id  # Corrected line to get the user ID
     if query.data == 'subscribe':
-        subscribe(query, context)
+        # Pass the user_id to the subscribe function
+        subscribe_user(user_id, context)
 
 # Define a function to handle the /ad command
 def ad(update, context):
