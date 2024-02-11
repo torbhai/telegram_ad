@@ -16,6 +16,12 @@ CHANNEL_ID = "societyoftb"
 # Define a list of users who have subscribed to the bot
 subscribers = []
 
+# Create an updater object with the bot token
+updater = Updater(token=BOT_TOKEN, use_context=True)
+
+# Get the dispatcher object from the updater
+dispatcher = updater.dispatcher
+
 # Define a function to handle the /start command
 def start(update, context):
     # Send a welcome message to the user
@@ -100,6 +106,7 @@ ad_handler = ConversationHandler(
 
 # Add the conversation handler to the dispatcher
 dispatcher.add_handler(ad_handler)
+
 # Define a function to handle the channel posts
 def channel_post(update, context):
     # Check if the post is from the specified channel
@@ -122,17 +129,10 @@ def unknown(update, context):
     # Send a message saying that the command is not recognized
     update.message.reply_text("Sorry, I did not understand that command.")
 
-# Create an updater object with the bot token
-updater = Updater(token=BOT_TOKEN, use_context=True)
-
-# Get the dispatcher object from the updater
-dispatcher = updater.dispatcher
-
 # Add handlers for the commands and the channel posts
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('subscribe', subscribe))
 dispatcher.add_handler(CommandHandler('unsubscribe', unsubscribe))
-dispatcher.add_handler(CommandHandler('ad', ad))
 dispatcher.add_handler(MessageHandler(Filters.update.channel_post, channel_post))
 dispatcher.add_handler(MessageHandler(Filters.command, unknown))
 
