@@ -1,6 +1,7 @@
 # Import the python-telegram-bot library and the logging module
 import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import ConversationHandler
 import logging
 
 # Enable logging for debugging purposes
