@@ -3,7 +3,6 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, filters
 import logging
 from telegram import Bot
-from queue import Queue
 # Enable logging for debugging purposes
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -98,8 +97,8 @@ def unknown(update, context):
 
 # Create an updater object with the bot token
 bot = Bot(token=BOT_TOKEN)
-update_queue = Queue()
-updater = Updater(bot=bot, update_queue=update_queue)
+updater = Updater(bot=bot)
+
 # Get the dispatcher object from the updater
 dispatcher = updater.dispatcher
 
