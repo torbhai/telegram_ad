@@ -1,13 +1,7 @@
 # Import the python-telegram-bot library and the logging module
 import telegram
-from telegram.ext import Updater, CommandHandler, MessageHandler, filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 import logging
-from telegram import Bot
-from telegram.utils.request import Request
-from telegram.ext import run_async
-
-@run_async
-def start(update, context):
 
 # Enable logging for debugging purposes
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -102,9 +96,7 @@ def unknown(update, context):
     update.message.reply_text("Sorry, I did not understand that command.")
 
 # Create an updater object with the bot token
-request = Request(con_pool_size=8) 
-bot = Bot(token=BOT_TOKEN, request=request)
-updater = Updater(bot=bot, use_context=True)
+updater = Updater(token=BOT_TOKEN, use_context=True)
 
 # Get the dispatcher object from the updater
 dispatcher = updater.dispatcher
@@ -114,8 +106,8 @@ dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('subscribe', subscribe))
 dispatcher.add_handler(CommandHandler('unsubscribe', unsubscribe))
 dispatcher.add_handler(CommandHandler('ad', ad))
-dispatcher.add_handler(MessageHandler(filters.update.channel_post, channel_post))
-dispatcher.add_handler(MessageHandler(filters.command, unknown))
+dispatcher.add_handler(MessageHandler(Filters.update.channel_post, channel_post))
+dispatcher.add_handler(MessageHandler(Filters.command, unknown))
 
 # Start the bot
 updater.start_polling()
