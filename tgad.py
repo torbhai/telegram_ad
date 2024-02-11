@@ -3,6 +3,7 @@ import telegram
 from telegram.ext import Updater, CommandHandler, MessageHandler, filters
 import logging
 from telegram import Bot
+from queue import Queue
 # Enable logging for debugging purposes
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
