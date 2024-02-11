@@ -4,6 +4,10 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, filters
 import logging
 from telegram import Bot
 from telegram.utils.request import Request
+from telegram.ext import run_async
+
+@run_async
+def start(update, context):
 
 # Enable logging for debugging purposes
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -106,7 +110,7 @@ updater = Updater(bot=bot, use_context=True)
 dispatcher = updater.dispatcher
 
 # Add handlers for the commands and the channel posts
-dispatcher.add_handler(CommandHandler('start', start), run_async=True)
+dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler('subscribe', subscribe))
 dispatcher.add_handler(CommandHandler('unsubscribe', unsubscribe))
 dispatcher.add_handler(CommandHandler('ad', ad))
