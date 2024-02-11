@@ -97,8 +97,8 @@ def unknown(update, context):
 
 # Create an updater object with the bot token
 bot = Bot(token=BOT_TOKEN)
-updater = Updater(bot=bot)
-
+update_queue = Queue()
+updater = Updater(bot=bot, update_queue=update_queue)
 # Get the dispatcher object from the updater
 dispatcher = updater.dispatcher
 
