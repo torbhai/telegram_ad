@@ -96,14 +96,14 @@ def unknown(update, context):
     update.message.reply_text("Sorry, I did not understand that command.")
 
 # Create an updater object with the bot token
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(token=BOT_TOKEN, con_pool_size=8)
 updater = Updater(bot=bot, use_context=True)
 
 # Get the dispatcher object from the updater
 dispatcher = updater.dispatcher
 
 # Add handlers for the commands and the channel posts
-dispatcher.add_handler(CommandHandler('start', start, run_async=True))
+dispatcher.add_handler(CommandHandler('start', start), run_async=True)
 dispatcher.add_handler(CommandHandler('subscribe', subscribe))
 dispatcher.add_handler(CommandHandler('unsubscribe', unsubscribe))
 dispatcher.add_handler(CommandHandler('ad', ad))
