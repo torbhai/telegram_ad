@@ -101,7 +101,7 @@ bot = Bot(token=BOT_TOKEN)
 update_queue = Queue()
 updater = Updater(bot=bot, update_queue=update_queue)
 # Get the dispatcher object from the updater
-application = updater.application
+dispatcher = updater.dispatcher
 
 # Add handlers for the commands and the channel posts
 dispatcher.add_handler(CommandHandler('start', start))
