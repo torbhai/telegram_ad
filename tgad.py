@@ -96,7 +96,8 @@ def unknown(update, context):
     update.message.reply_text("Sorry, I did not understand that command.")
 
 # Create an updater object with the bot token
-updater = Updater(token=BOT_TOKEN, use_context=True)
+bot = Bot(token=BOT_TOKEN)
+updater = Updater(bot=bot, use_context=True)
 
 # Get the dispatcher object from the updater
 dispatcher = updater.dispatcher
